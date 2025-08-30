@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/milligram" />
+  </head>
+  <body>
+    <div class="container" id="main">
+      <h1>Blog</h1>
+    </div>
+
+    <script>
+      var data = [
+        {
+          title: "Lorem ipsum",
+          body: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p><figure><oembed src="https://www.youtube.com/watch?v=x3QShHqQHQc" width="560" height="315"></oembed></figure><p>Nunc accumsan sem at dolor hendrerit, in facilisis erat fringilla. Ut non libero magna.</p><figure><oembed src="https://www.youtube.com/watch?v=cOPdEYTr9OQ" width="560" height="315"></oembed></figure>',
+        },
+        {
+          title: "Sed do eiusmod",
+          body: '<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p><figure><oembed src="https://www.youtube.com/watch?v=pMZPTnWpaWk" width="560" height="315"></oembed></figure>',
+        },
+      ];
+
+      const main = document.getElementById("main");
+
+      data.forEach((post) => {
+        const article = document.createElement("article");
+        const title = document.createElement("h2");
+        title.textContent = post.title;
+        article.appendChild(title);
+
+        const body = document.createElement("div");
+        body.innerHTML = post.body;
+        article.appendChild(body);
+
+        body.querySelectorAll("oembed").forEach((oembed) => {
+          const figure = oembed.parentElement;
+          const div = document.createElement("div");
+          const iframe = document.createElement("iframe");
+          const src = new URL(oembed.getAttribute("src"));
+          div.setAttribute(
+            "style",
+            "position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;"
+          );
+
+          iframe.setAttribute(
+            "src",
+            `https://www.youtube.com/embed/${src.searchParams.get("v")}`
+          );
+          iframe.setAttribute(
+            "style",
+            "position: absolute; top: 50%; left: 50%; width: 100vw; height: 100vh; transform: translate(-50%, -50%);"
+          );
+          iframe.setAttribute("height", oembed.getAttribute("height") || "315");
+          iframe.setAttribute("frameborder", "0");
+          iframe.setAttribute(
+            "allow",
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          );
+          iframe.setAttribute("allowfullscreen", "");
+          div.appendChild(iframe);
+          figure.replaceWith(div);
+        });
+
+        main.appendChild(article);
+      });
+    </script>
+  </body>
+</html>
